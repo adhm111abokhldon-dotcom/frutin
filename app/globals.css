@@ -1,26 +1,106 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Green Palette */
+  --color-green-50: #e6f2e6;
+  --color-green-100: #b0d7b1;
+  --color-green-200: #8ac38b;
+  --color-green-300: #55a856;
+  --color-green-400: #349735;
+  --color-green-500: #017d03;
+  --color-green-600: #017203;
+  --color-green-700: #015902;
+  --color-green-800: #014502;
+  --color-green-900: #003501;
+
+  /* Orange Palette */
+  --color-orange-50: #fef5e6;
+  --color-orange-100: #fde0b0;
+  --color-orange-200: #fcd18a;
+  --color-orange-300: #fbba56;
+  --color-orange-400: #fba333;
+  --color-orange-500: #f99c00;
+  --color-orange-600: #e88e00;
+  --color-orange-700: #b86f00;
+  --color-orange-800: #8c5300;
+  --color-orange-900: #6b4200;
+
+  /* Grey Palette */
+  --color-grey-50: #e6e6e6;
+  --color-grey-100: #b2b2b3;
+  --color-grey-200: #8d8d8e;
+  --color-grey-300: #5a5a5a;
+  --color-grey-400: #383938;
+  --color-grey-500: #0d0b09;
+  --color-grey-600: #070708;
+  --color-grey-700: #060606;
+  --color-grey-800: #040405;
+  --color-grey-900: #030304;
+  --color-secondary-color: #3e4246;
+  --color-primary: #080809;
+
+  /* fonts */
+  --font-lobster: var(--font-lobster-src), cursive;
+  --font-dm-sans: var(--font-dm-sans-src), sans-serif;
+  --font-lexend: var(--font-lexend-src), sans-serif;
+}
+h1 {
+  @apply font-lexend font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl;
+}
+h2 {
+  @apply font-lexend font-semibold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl;
+}
+h3,
+h4,
+h5,
+h6,
+p,
+span {
+  @apply font-dm-sans;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.title-font {
+  @apply font-lobster text-orange-500 text-[18px] sm:text-[24px] md:text-[32px] lg:text-[40px] xl:text-[48px];
+}
+.custom-green-btn {
+  @apply uppercase font-dm-sans hover:bg-green-700  active:scale-[0.9]  transition-all duration-300 cursor-pointer flex items-center gap-2 text-xs sm:text-sm md:text-base py-2 md:py-3 px-3  md:px-5 justify-center rounded-[54px] bg-green-500 text-white;
+}
+.custom-orange-btn {
+  @apply uppercase flex cursor-pointer  active:scale-[0.9]  items-center gap-2 py-2 md:py-3 px-3  md:px-5  text-xs sm:text-sm md:text-base  justify-center rounded-[54px] bg-orange-500 hover:bg-orange-700 transition-all duration-300 text-white;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.custom-green-arrow-btn {
+  @apply rounded-full cursor-pointer active:scale-[0.9]  transition-all p-3 hover:bg-green-700  bg-green-500  text-white;
+}
+.custom-orange-arrow-btn {
+  @apply rounded-full p-3 cursor-pointer active:scale-[0.9]  transition-all hover:bg-orange-700 bg-orange-500 text-white;
+}
+.section-padding {
+  @apply pt-12 md:pt-16 lg:pt-20;
+}
+.custom-container {
+  @apply w-full px-4 sm:px-8 md:px-12 lg:px-24 xl:px-32 mx-auto max-w-300;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #444;
+
+  /* Center slide text vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
