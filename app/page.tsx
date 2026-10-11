@@ -1,6 +1,7 @@
 import AboutUsBtm from "@/components/aboutUs/AboutUsBtm";
 import AboutUsTop from "@/components/aboutUs/AboutUsTop";
-import Blog from "@/components/Blog";
+
+import Contact from "@/components/Contact";
 import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
@@ -26,7 +27,8 @@ export default function Home() {
       <FAQ />
 
       <Testimonials />
-      <Blog />
+
+      <Contact />
       <Footer />
     </>
   );

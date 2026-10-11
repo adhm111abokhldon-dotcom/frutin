@@ -1,15 +1,16 @@
 "use client";
-import { FAQData } from "@/data/FAQData";
 import Title from "./Ui/Title";
 import Image from "next/image";
 import FAQBg from "@/assets/images/FAQ-bg.png";
 import FAQBgSmall from "@/assets/images/FAQ-bg-small.jpeg";
 import FAQImg from "@/assets/images/FAQ.png";
 import { useState } from "react";
+import { useLanguage } from "@/lib/i18n";
 const FAQ = () => {
+  const { t, locale } = useLanguage();
   const [isOpen, setIsOpen] = useState<number | null>(null);
   return (
-    <section>
+    <section id="faq" className="scroll-mt-20">
       <div className="section-padding">
         <div className="custom-container gap-7 relative py-12 md:py-16 lg:py-20 grid-cols-1  grid sm:grid-cols-2">
           <Image src={FAQBg} alt="" className="max-md:hidden" fill />
@@ -17,8 +18,8 @@ const FAQ = () => {
           <div className="relative z-10 flex flex-col gap-10 items-center ">
             <div className="max-sm:hidden">
               <Title
-                heading="Looking For Answers?"
-                subHeading="If You Have Any Questions? (FAQ)"
+                heading={t.faq.eyebrow}
+                subHeading={t.faq.title}
                 subHeadingClassName="text-primary!"
                 isCenter={false}
                 isLeaf={false}
@@ -26,21 +27,21 @@ const FAQ = () => {
             </div>
             <div className="sm:hidden">
               <Title
-                heading="Looking For Answers?"
-                subHeading="If You Have Any Questions? (FAQ)"
+                heading={t.faq.eyebrow}
+                subHeading={t.faq.title}
                 subHeadingClassName="text-primary!"
                 isCenter={true}
                 isLeaf={false}
               />
             </div>
             <div className="relative">
-              <Image src={FAQImg} alt="" />
+              <Image src={FAQImg} alt={t.faq.imageAlt} />
             </div>
           </div>
           <div className="flex flex-col gap-4 relative z-20">
-            {FAQData.map((faq, index) => (
+            {t.faq.items.map((faq, index) => (
               <div
-                key={faq.question}
+                key={`${locale}-${faq.question}`}
                 className={`rounded-xl border transition-all duration-300 ${
                   isOpen === index
                     ? "border-primary/40 bg-white shadow-sm"
@@ -52,7 +53,8 @@ const FAQ = () => {
                   onClick={() =>
                     isOpen === index ? setIsOpen(null) : setIsOpen(index)
                   }
-                  className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
+                  aria-expanded={isOpen === index}
+                  className="flex w-full items-center justify-between gap-4 px-5 py-4 text-start cursor-pointer"
                 >
                   <h4 className="text-sm font-bold text-primary sm:text-base md:text-lg">
                     {faq.question}

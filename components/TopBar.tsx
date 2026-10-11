@@ -1,5 +1,7 @@
+"use client";
 import Link from "next/link";
 import { socialMedia } from "@/data/social-media";
+import { useLanguage } from "@/lib/i18n";
 
 const socialHovers: Record<string, string> = {
   Facebook: "hover:text-blue-500",
@@ -10,15 +12,16 @@ const socialHovers: Record<string, string> = {
 };
 
 const TopBar = () => {
+  const { t } = useLanguage();
   return (
     <div className="bg-green-500 text-white py-2">
       <div className="custom-container sm:flex sm:justify-between items-center">
         <div className=" items-center gap-4 hidden xl:flex">
-          Orders of $50 or more qualify for free shipping!
+          {t.topBar.shippingNote}
         </div>
         <div className="flex sm:justify-between max-sm:justify-center max-xl:w-full items-center gap-4">
           <div className="max-sm:text-sm max-sm:text-center max-sm:w-full">
-            Orders of $50 or more qualify for free shipping!{" "}
+            {t.topBar.shippingNote}{" "}
             <span className="ps-2 max-lg:hidden" aria-hidden="true">
               |
             </span>

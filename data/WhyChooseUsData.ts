@@ -5,36 +5,5 @@ import secure from "@/assets/icons/Secure";
 import neat from "@/assets/icons/Neat";
 import daily from "@/assets/icons/Daily";
 
-
-export const WhyChooseUsData = [
-  {
-    title: "100% Organic",
-    desc: "Our Products are certified by reputable organic",
-    icon: organic,
-  },
-  {
-    title: "Fresh Products",
-    desc: "Our Products are certified by reputable organic",
-    icon: fresh,
-  },
-  {
-    title: "Biodynamic Food",
-    desc: "Our Products are certified by reputable organic",
-    icon: biodynamic,
-  },
-  {
-    title: "Secured Payment",
-    desc: "Our Products are certified by reputable organic",
-    icon: secure,
-  },
-  {
-    title: "Neat & Clean",
-    desc: "Our Products are certified by reputable organic",
-    icon: neat,
-  },
-  {
-    title: "Daily Fresh",
-    desc: "Our Products are certified by reputable organic",
-    icon: daily,
-  },
-];
+// Icon registry only (no user-facing text). Text lives in locales/en.ts + locales/ar.ts.
+export const WhyChooseUsIcons = [organic, fresh, biodynamic, secure, neat, daily];

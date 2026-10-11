@@ -1,38 +1,30 @@
 "use client";
 import { MdMenu } from "react-icons/md";
-import { IoMdSearch } from "react-icons/io";
-import { IoMdCart } from "react-icons/io";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 // material ui imports
 import Drawer from "@mui/material/Drawer";
 import Divider from "@mui/material/Divider";
 import Link from "next/link";
 import { socialMedia } from "@/data/social-media";
-const links = [
-  {
-    name: "Home",
-    href: "/",
-  },
-  { name: "Pages", href: "/pages" },
-  {
-    name: "Services",
-    href: "/services",
-  },
-  {
-    name: "Blog",
-    href: "/blog",
-  },
-  {
-    name: "About Us",
-    href: "/about-us",
-  },
+import { useLanguage } from "@/lib/i18n";
+import LanguageSwitcher from "./LanguageSwitcher";
 
-  {
-    name: "Contact",
-    href: "/contact",
-  },
-];
+export const BrandLogo = ({
+  className = "text-2xl",
+}: {
+  className?: string;
+}) => {
+  // Wordmark stays in the Latin script in both languages (no Arabic glyphs
+  // in Lobster): identical font, size, and color, so the switch never
+  // changes the logo's visual identity.
+  const { t } = useLanguage();
+  return (
+    <div className={`title-font ${className}`} lang="en" dir="ltr">
+      {t.header.brand}
+    </div>
+  );
+};
 
 const socialColors: Record<string, string> = {
   Facebook: "text-blue-500",
@@ -43,106 +35,125 @@ const socialColors: Record<string, string> = {
 };
 
 const Header = () => {
+  const { t, dir } = useLanguage();
   const [open, setOpen] = useState(false);
-  const toggleDrawer = (newOpen: boolean) => () => {
-    setOpen(newOpen);
-  };
-  const DrawerList = (
-    <div className="w-70 max-h-screen! relative" onClick={toggleDrawer(false)}>
-      <button
-        type="button"
-        aria-label="Close menu"
-        className="absolute top-3 z-50 right-2 cursor-pointer"
-      >
-        <IoCloseSharp className="text-3xl text-red-500" />
-      </button>
-      <div className="title-font text-3xl text-center py-4">Frutin</div>
 
-      <div className="flex flex-col gap-2 mb-5">
-        {links.map((link) => (
-          <div
-            key={link.name}
-            className="bg-gray-100 hover:bg-gray-200 ps-4 py-3 flex items-center"
-          >
-            <Link className="w-full h-full" href={link.href}>
-              {link.name}
-            </Link>
-          </div>
-        ))}
-      </div>
-
-      <Divider />
-
-      {/* social media */}
-      <div className="flex items-center mt-14 sm:mt-12 gap-4 text-2xl w-full justify-center ">
-        {socialMedia.map(({ name, href, Icon }) => (
-          <Link
-            key={name}
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={name}
-            className={socialColors[name]}
-          >
-            <Icon />
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
+  // Close the drawer on Escape for keyboard users.
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open]);
 
   return (
-    <div className="custom-container flex justify-between items-center py-4">
-      <div className="title-font text-2xl">Frutin</div>
+    <div className="custom-container flex justify-between items-center gap-3 py-4">
+      <Link href="/#home" aria-label="Frutin — home">
+        <BrandLogo />
+      </Link>
 
       {/* desktop */}
-      <div className="max-md:hidden">
+      <nav aria-label="Primary" className="max-md:hidden">
         <ul className="flex gap-4">
-          {links.map((link) => (
+          {t.nav.map((link) => (
             <li
-              key={link.name}
+              key={link.id}
               className="text-secondary-color hover:underline  md:text-lg xl:text-xl transition-all duration-300"
             >
-              <Link href={link.href}>{link.name}</Link>
+              <Link href={link.href}>{link.label}</Link>
             </li>
           ))}
         </ul>
-      </div>
+      </nav>
       {/* mobile */}
 
       <Drawer
-        anchor="right"
+        anchor={dir === "rtl" ? "left" : "right"}
         className="h-screen!"
         open={open}
-        onClose={toggleDrawer(false)}
+        onClose={() => setOpen(false)}
+        ModalProps={{ keepMounted: false }}
+        slotProps={{
+          backdrop: { invisible: false },
+        }}
       >
-        {DrawerList}
+        <div className="w-70 max-h-screen! relative">
+          <button
+            type="button"
+            aria-label={t.header.closeMenu}
+            onClick={() => setOpen(false)}
+            className="absolute top-3 z-50 cursor-pointer start-auto end-2"
+          >
+            <IoCloseSharp className="text-3xl text-red-500" />
+          </button>
+          <div
+            className="title-font text-3xl text-center py-4"
+            lang="en"
+            dir="ltr"
+          >
+            Frutin
+          </div>
+
+          <nav aria-label="Mobile" className="flex flex-col gap-2 mb-5">
+            {t.nav.map((link) => (
+              <div
+                key={link.id}
+                className="bg-gray-100 hover:bg-gray-200 ps-4 py-3 flex items-center"
+              >
+                <Link
+                  className="w-full h-full"
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              </div>
+            ))}
+          </nav>
+
+          <Divider />
+
+          {/* social media */}
+          <div className="flex items-center mt-14 sm:mt-12 gap-4 text-2xl w-full justify-center ">
+            {socialMedia.map(({ name, href, Icon }) => (
+              <Link
+                key={name}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={name}
+                className={socialColors[name]}
+              >
+                <Icon />
+              </Link>
+            ))}
+          </div>
+        </div>
       </Drawer>
 
-      {/* cart and search btn */}
+      {/* language switcher */}
       <div className="hidden md:flex items-center gap-2">
-        <button type="button" aria-label="Search" className="cursor-pointer">
-          <IoMdSearch className="text-3xl text-secondary-color" />
-        </button>
-        <div className="flex justify-center items-center relative">
-          <button type="button" aria-label="Cart" className="cursor-pointer">
-            <IoMdCart className="text-3xl text-secondary-color" />
-          </button>
-          <div className=" w-5 h-5 p-1.5 bg-orange-500 absolute -top-2 -right-2.5  rounded-[50%] text-white text-[12px] flex justify-center items-center">
-            0
-          </div>
+        <div className="ms-2">
+          <LanguageSwitcher />
         </div>
       </div>
       {/* menu*/}
 
-      <button
-        type="button"
-        aria-label="Open menu"
-        className="md:hidden cursor-pointer"
-        onClick={toggleDrawer(true)}
-      >
-        <MdMenu className="text-3xl text-secondary-color" />
-      </button>
+      <div className="flex items-center gap-2 md:hidden">
+        <LanguageSwitcher />
+        <button
+          type="button"
+          aria-label={t.header.openMenu}
+          aria-expanded={open}
+          aria-controls="mobile-nav-drawer"
+          className="cursor-pointer"
+          onClick={() => setOpen(true)}
+        >
+          <MdMenu className="text-3xl text-secondary-color" />
+        </button>
+      </div>
     </div>
   );
 };

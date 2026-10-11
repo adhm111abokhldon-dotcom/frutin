@@ -44,6 +44,40 @@
   --font-dm-sans: var(--font-dm-sans-src), sans-serif;
   --font-lexend: var(--font-lexend-src), sans-serif;
 }
+
+/* Language-aware typography: English keeps Lexend/Lobster/DM Sans.
+   Arabic remaps the same utility classes to the Arabic fonts so every
+   existing font-lexend / font-lobster / font-dm-sans usage switches
+   automatically (IBM Plex Sans Arabic for headings, Noto Sans Arabic
+   for body/interface text). */
+html[lang="ar"] {
+  --font-lexend: var(--font-plex-arabic-src), "IBM Plex Sans Arabic",
+    var(--font-lexend-src), sans-serif;
+  --font-lobster: var(--font-plex-arabic-src), "IBM Plex Sans Arabic", cursive;
+  --font-dm-sans: var(--font-noto-arabic-src), "Noto Sans Arabic",
+    var(--font-dm-sans-src), sans-serif;
+}
+
+/* Central RTL adjustments (no per-component hacks). */
+html[dir="rtl"] body {
+  letter-spacing: 0 !important;
+}
+
+/* Smooth in-page anchor navigation (e.g. Contact link -> #contact). */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Directional icons: mirror only CTA/arrow icons in RTL. */
+html[dir="rtl"] .mirror-rtl {
+  transform: scaleX(-1);
+}
 h1 {
   @apply font-lexend font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl;
 }

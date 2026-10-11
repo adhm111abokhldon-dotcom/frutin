@@ -6,53 +6,24 @@ import "swiper/css/pagination";
 import swiperFirstImg from "@/assets/images/about-us-2.png";
 import swiperSecondImg from "@/assets/images/about-us-3.png";
 import Image from "next/image";
+import Link from "next/link";
 import { FaAngleDoubleRight } from "react-icons/fa";
-import Arrow from "@/assets/icons/Arrow";
+import { useLanguage } from "@/lib/i18n";
 
-const swiperData = [
-  {
-    heading: "Get Extra",
-    headingSpan: "50% off",
-    desc: "Fresh Vegetable & Organic Fruits",
-    img: swiperFirstImg,
-  },
-  {
-    heading: "Get Extra",
-    headingSpan: "50% off",
-    desc: "Organic Vegetable & Fresh Fruits",
-    img: swiperSecondImg,
-  },
-  {
-    heading: "Get Extra",
-    headingSpan: "50% off",
-    desc: "Fresh Vegetable & Organic Fruits",
-    img: swiperFirstImg,
-  },
-  {
-    heading: "Get Extra",
-    headingSpan: "50% off",
-    desc: "Organic Vegetable & Fresh Fruits",
-    img: swiperSecondImg,
-  },
-  {
-    heading: "Get Extra",
-    headingSpan: "50% off",
-    desc: "Fresh Vegetable & Organic Fruits",
-    img: swiperFirstImg,
-  },
-  {
-    heading: "Get Extra",
-    headingSpan: "50% off",
-    desc: "Organic Vegetable & Fresh Fruits",
-    img: swiperSecondImg,
-  },
-];
+const promoImages = [swiperFirstImg, swiperSecondImg];
 
 const AboutUsBtm = () => {
+  const { t, locale } = useLanguage();
+  const slides = Array.from({ length: 6 }, (_, index) => ({
+    ...t.promo.slides[index % t.promo.slides.length],
+    img: promoImages[index % promoImages.length],
+  }));
   return (
     <section className="section-padding w-full">
       <div className="custom-container  h-50 md:h-70">
         <Swiper
+          key={locale}
+          dir={locale === "ar" ? "rtl" : "ltr"}
           slidesPerView={1}
           spaceBetween={8}
           breakpoints={{
@@ -65,35 +36,39 @@ const AboutUsBtm = () => {
           modules={[Pagination]}
           className="mySwiper"
         >
-          {swiperData.map((slide, index) => (
+          {slides.map((slide, index) => (
             <SwiperSlide
               className="relative overflow-hidden! rounded-4xl!"
-              key={index}
+              key={`${slide.description}-${index}`}
             >
               <Image
                 src={slide.img}
-                alt="slide relative rounded-4xl! -z-10 background"
+                alt={t.promo.imageAlt}
                 className="object-cover"
                 fill
               />
               <div
                 className="flex text-sm md:text-base relative z-10 rounded-4xl! flex-col p-4 sm:p-5 md:p-8
-              lg:p-10 w-full items-start"
+              lg:p-10 w-full items-start text-start"
               >
                 <h4 className="text-primary font-bold mb-6.5">
                   {slide.heading}
                   <span className="text-green-500! font-bold ps-0.5">
-                    {slide.headingSpan}
+                    {slide.highlight}
                   </span>
                 </h4>
                 <p className="mb-6 md:mb-9 md:text-xl xl:text-2xl text-primary font-bold">
-                  {slide.desc}
+                  {slide.description}
                 </p>
                 <div className=" relative z-20 w-fit">
-                  <button className="custom-green-btn group">
-                    shop now{" "}
-                    <FaAngleDoubleRight className="group-hover:scale-[1.2] transition-transform duration-300" />
-                  </button>
+                  <Link
+                    href="/#contact"
+                    aria-label={`${t.promo.cta} — ${slide.description}`}
+                    className="custom-green-btn group"
+                  >
+                    {t.promo.cta}{" "}
+                    <FaAngleDoubleRight className="mirror-rtl group-hover:scale-[1.2] rtl:group-hover:-scale-x-[1.2] transition-transform duration-300" />
+                  </Link>
                 </div>
               </div>
             </SwiperSlide>
